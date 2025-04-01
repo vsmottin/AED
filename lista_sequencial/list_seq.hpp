@@ -25,11 +25,11 @@ public:
 
     bool add(int elem);
 
-    bool remove();
+    void remove();
 
     void insert(int elem, int pos);
 
-    bool removeAt(int pos);
+    void removeAt(int pos);
 
     bool addSorted(int elem);
 };
