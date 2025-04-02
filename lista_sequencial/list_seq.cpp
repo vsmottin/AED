@@ -45,21 +45,19 @@ void ListSeq::destroy() {
 }
 
 int ListSeq::find(int elem) {
-    int found = -1;
     for (int i = 0; i < size; i++){
-        if (data[i] == elem) found = i;
+        if (data[i] == elem) return i;
     }
-
-    return found;
+    
+    return -1;
 }
 
 int ListSeq::get(int pos) {
-    if (pos < size && pos > 0){
-        return data[pos];;
-    } else{
-        return 0;
+    if (pos < size && pos >= 0){
+        return data[pos];
     }
-    
+
+    return -1;
 }
 
 void ListSeq::remove() {
@@ -67,14 +65,17 @@ void ListSeq::remove() {
 }
 
 void ListSeq::insert(int elem, int pos) {
-    if (pos > capacity){
-        resize();
-        for (int i = capacity; i > pos; i--){
-            data[i] = data[i - 1];
-        }
+    if(pos > size || pos < 0) return;
 
-        data[pos] = elem;
+    if(size + 1 > capacity) resize();
+    
+
+    for (int i = size; i > pos; i--){
+        data[i] = data[i - 1];
     }
+
+    data[pos] = elem;
+    size++;
 }
 
 void ListSeq::removeAt(int pos) {
@@ -89,19 +90,21 @@ void ListSeq::removeAt(int pos) {
 }
 
 bool ListSeq::addSorted(int elem) {
-    if(size + 1 > capacity) resize();
+    if (size >= capacity) resize();
     
-    int pos = 0;
-
-    for (int i = capacity; i > 0; i--){
-        if (data[i] > elem) pos = i; break;
-        data[i] = data[i - 1];
+    int i = size - 1;
+    
+    while (i >= 0 && data[i] > elem) {
+        data[i + 1] = data[i];
+        i--;
     }
-
-    data[pos] = elem;
+    
+    data[i + 1] = elem;
+    size++;
     
     return true;
 }
+
 
 bool ListSeq::print(){
     for (int i = 0; i < size; i++){
