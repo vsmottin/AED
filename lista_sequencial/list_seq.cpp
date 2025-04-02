@@ -52,7 +52,9 @@ void ListSeq::remove() {
     if (!isEmpty()) size--;
 }
 
-void ListSeq::insert(int elem, int pos) {}
+void ListSeq::insert(int elem, int pos) {
+    
+}
 
 void ListSeq::removeAt(int pos) {
     if (pos < size){
