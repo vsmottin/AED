@@ -89,6 +89,7 @@ void ListSeq::removeAt(int pos) {
     }
 }
 
+//pergunta se o próximo é maior, verificar se não é o último
 bool ListSeq::addSorted(int elem) {
     if (size >= capacity) resize();
     
