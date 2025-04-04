@@ -1,6 +1,8 @@
 #include "linked_list.hpp"
 #include <stdio.h>
 
+using namespace std;
+
 LinkedList::LinkedList() { //metodo construtor
     this-> head = nullptr;
 }
@@ -32,7 +34,13 @@ int LinkedList::get(int pos) { //retorna o node
     return 0;
 }
 
-void LinkedList::print() {}
+void LinkedList::print() {
+    Node* node = this-> head;
+    while(node){
+        cout << " -> " << node-> key;
+        node = node-> next;
+    }
+}
 
 int LinkedList::size() {
     return 0;
