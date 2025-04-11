@@ -87,19 +87,19 @@ bool LinkedList::remove_after(Node* pos) { //apos find
 }
 
 bool LinkedList::insert(int pos, int key) {
-    if (pos <= this-> size()){
-        Node* aux = this-> head;
 
-        for (size_t i = 1; i < pos; i++){
-            aux = aux-> next;
-        }
-        
-        Node* novo = new Node{key, aux};
-        aux->next = novo;
+    if(pos == 0) return this-> push_front(key);
+    
+    Node* aux = this-> head;
 
-    } else {
-        return false;
+    for (size_t i = 1; i < pos && aux; i++){
+        aux = aux-> next;
     }
+
+    if (!aux) return false;
+        
+    Node* novo = new Node{key, aux-> next};
+    aux->next = novo;
     
     return true;
 }
