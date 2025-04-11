@@ -39,7 +39,9 @@ public:
     
     bool insert(int pos, int key);
 
-    bool remove(int pos);
+    bool removeAt(int pos);
+
+    bool remove(int key);
     
     bool insert_sorted(int key);
 
