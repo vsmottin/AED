@@ -46,4 +46,12 @@ public:
     bool insert_sorted(int key);
 
     bool equals(LinkedList* other);
+
+    void print_last();
+
+    LinkedList* deep_copy();
+
+    LinkedList* concat(LinkedList* list2);
+
+    LinkedList* merge(LinkedList* list2);
 };

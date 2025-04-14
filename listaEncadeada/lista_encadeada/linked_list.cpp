@@ -190,5 +190,30 @@ bool LinkedList::empty() {
 }
 
 bool LinkedList::insert_sorted(int key){
+    Node* aux = this-> head;
+    int pos = 0;
+    while (aux && aux->key < key){
+        aux = aux-> next;
+        pos++;
+    }
 
+    if (!aux) return false;
+
+    insert(pos, key);   
+    return true;
 }
+
+void LinkedList::print_last(){
+    Node* aux = this-> head;
+    while (aux){
+        aux = aux-> next;
+    }
+
+    cout << "Último -> " << aux-> key;
+}
+
+LinkedList* LinkedList::deep_copy(){}
+
+LinkedList* LinkedList::concat(LinkedList* list2){}
+
+LinkedList* LinkedList::merge(LinkedList* list2){}
