@@ -212,8 +212,14 @@ void LinkedList::print_last(){
     cout << "Último -> " << aux-> key;
 }
 
-LinkedList* LinkedList::deep_copy(){}
+LinkedList* LinkedList::deep_copy(){
 
-LinkedList* LinkedList::concat(LinkedList* list2){}
+}
 
-LinkedList* LinkedList::merge(LinkedList* list2){}
+LinkedList* LinkedList::concat(LinkedList* list2){
+
+}
+
+LinkedList* LinkedList::merge(LinkedList* list2){
+    
+}
