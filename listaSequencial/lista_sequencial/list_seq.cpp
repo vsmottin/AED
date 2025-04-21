@@ -42,6 +42,10 @@ bool ListSeq::resize(){
 
 void ListSeq::destroy() {
     delete [] data;
+    data = nullptr;
+    size = 0;
+    capacity = 0;
+    
 }
 
 int ListSeq::find(int elem) {
@@ -65,17 +69,16 @@ void ListSeq::remove() {
 }
 
 void ListSeq::insert(int elem, int pos) {
-    if(pos > size || pos < 0) return;
+    if (pos < 0 || pos > size) return;
 
-    if(size + 1 > capacity) resize();
-    
+    if (size + 1 > capacity) resize();
 
-    for (int i = size; i > pos; i--){
+    for (int i = size; i > pos; i--) {
         data[i] = data[i - 1];
     }
 
     data[pos] = elem;
-    size++;
+    size++; 
 }
 
 void ListSeq::removeAt(int pos) {
@@ -111,7 +114,6 @@ bool ListSeq::print(){
     for (int i = 0; i < size; i++){
         cout << data[i] << " ";
     }
-    cout << endl;
 
     return true;
 }

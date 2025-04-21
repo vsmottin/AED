@@ -8,7 +8,14 @@ LinkedList::LinkedList() { //metodo construtor
     this-> head = nullptr;
 }
 
-LinkedList::~LinkedList() {}   //metodo destrutor
+LinkedList::~LinkedList() {
+    Node* aux = this-> head;
+    while (aux) {
+        Node* next = aux->next;
+        delete aux;
+        aux = next;
+    }
+}   
 
 bool LinkedList::push_front(int key){
     Node* node = new Node{key, nullptr};
@@ -19,8 +26,8 @@ bool LinkedList::push_front(int key){
     return true;
 }
 
-bool LinkedList::pop_front() { //insere na frente
-    if (!this-> head){
+bool LinkedList::pop_front() { //deleta na frente
+    if (this-> head){
         Node* aux = this-> head;
         this-> head = aux-> next;
         delete aux;
@@ -31,16 +38,20 @@ bool LinkedList::pop_front() { //insere na frente
 }
 
 bool LinkedList::push_back(int key) { //insere no fim
-    Node* aux = this-> head;
-    while (aux-> next){
-        aux = aux-> next;
-    }
+        Node* novo = new Node{key, nullptr};
+        if (!novo) return false;
     
-    Node* novo = new Node{key, nullptr};
-    if (!novo) return false;
+        if (!this-> head) this-> head = novo;
+        
+        else {
+            Node* aux = this-> head;
+            while (aux->next) {
+                aux = aux->next;
+            }
 
-    aux-> next = novo;
-    return true;
+            aux->next = novo;
+        }
+        return true;
 }
 
 bool LinkedList::equals(LinkedList* other) {
@@ -93,11 +104,9 @@ int LinkedList::size() {
 Node* LinkedList::find(int key) {
     Node* aux = this-> head;
     
-    while (aux-> key != key && aux-> next){
+    while (aux-> key != key && aux){
         aux = aux-> next;
     }
-    
-    if (!aux) return nullptr;
     
     return aux;
 }
@@ -154,33 +163,42 @@ bool LinkedList::removeAt(int pos) {
 }
 
 bool LinkedList::remove(int key) {
-    Node* aux = this-> head;
-    
-    while (aux-> next-> key != key && aux-> next){
+    if (!this-> head) return false;
+
+    if (this-> head->key == key) {
+        Node* temp = this-> head;
+        this-> head = this-> head-> next;
+        delete temp;
+        return true;
+    }
+
+    Node* aux = head;
+    while (aux-> next && aux-> next-> key != key) {
         aux = aux-> next;
     }
 
-    if (!aux-> next) return false;
+    if (!aux-> next) return false; // Não encontrou
 
     Node* deletar = aux-> next;
     aux-> next = aux-> next-> next;
     delete deletar;
-    
     return true;
 }
 
-bool LinkedList::pop_back() { //apaga
-    Node* aux = this-> head;
+bool LinkedList::pop_back() {
+    if (!this-> head) return false;
 
-    if (!aux) return false;
-
-    while (aux-> next-> next){
-        aux = aux-> next;
+    if (!this-> head-> next) {
+        delete head;
+        head = nullptr;
+    } else {
+        Node* aux = head;
+        while (aux-> next-> next) {
+            aux = aux-> next;
+        }
+        delete aux-> next;
+        aux-> next = nullptr;
     }
-    
-    Node* deletar = aux-> next;
-    aux-> next = nullptr;
-    delete deletar;
 
     return true;
 }
@@ -189,31 +207,132 @@ bool LinkedList::empty() {
     return this-> head == nullptr;
 }
 
-bool LinkedList::insert_sorted(int key){
-    Node* aux = this-> head;
-    int pos = 0;
-    while (aux && aux->key < key){
-        aux = aux-> next;
-        pos++;
+bool LinkedList::insert_sorted(int key) {
+    if (!this-> head || key < this-> head-> key) {
+        return push_front(key);
     }
 
-    if (!aux) return false;
+    Node* current = this-> head;
+    while (current-> next && current-> next-> key < key) {
+        current = current-> next;
+    }
 
-    insert(pos, key);   
+    Node* novo = new Node{key, current-> next};
+    current-> next = novo;
     return true;
 }
 
 void LinkedList::print_last(){
     Node* aux = this-> head;
-    while (aux){
+
+    if (!aux){
+        cout << "Lista vazia." << endl;
+        return;
+    }
+
+    while (aux-> next){
         aux = aux-> next;
     }
 
-    cout << "Último -> " << aux-> key;
+    cout << "Último -> " << aux-> key << endl;
 }
 
-LinkedList* LinkedList::deep_copy(){}
+LinkedList* LinkedList::deep_copy() {
+    if (this->head == nullptr) {
+        return new LinkedList();
+    }
 
-LinkedList* LinkedList::concat(LinkedList* list2){}
+    Node* original_current = this->head;
+    Node* new_head = new Node{original_current->key, nullptr};
+    Node* new_current = new_head;
 
-LinkedList* LinkedList::merge(LinkedList* list2){}
+    original_current = original_current->next;
+
+    while (original_current != nullptr) {
+        new_current->next = new Node{original_current->key, nullptr};
+        new_current = new_current->next;
+        original_current = original_current->next;
+    }
+
+    LinkedList* new_list = new LinkedList();
+    new_list->head = new_head;
+    return new_list;
+}
+
+LinkedList* LinkedList::concat(LinkedList* list2) {
+    LinkedList* new_list = new LinkedList(); 
+    Node* new_current = nullptr; 
+
+    Node* original_current = this->head;
+    if (original_current != nullptr) {
+        new_list->head = new Node{original_current->key, nullptr};
+        new_current = new_list->head;
+        original_current = original_current->next;
+
+        while (original_current != nullptr) {
+            new_current->next = new Node{original_current->key, nullptr};
+            new_current = new_current->next;
+            original_current = original_current->next;
+        }
+    }
+
+    if (list2 != nullptr) {
+        original_current = list2->head; 
+
+        if (new_current == nullptr && original_current != nullptr) {
+            new_list->head = new Node{original_current->key, nullptr};
+            new_current = new_list->head;
+            original_current = original_current->next;
+        }
+
+        while (original_current != nullptr) {
+            new_current->next = new Node{original_current->key, nullptr};
+            new_current = new_current->next;
+            original_current = original_current->next;
+        }
+    }
+
+    return new_list; 
+}
+
+LinkedList* LinkedList::merge(LinkedList* list2) {
+    LinkedList* new_list = new LinkedList(); 
+    Node* new_current = nullptr; 
+
+    Node* current1 = this->head; 
+    Node* current2 = (list2 != nullptr) ? list2->head : nullptr; 
+
+    bool use_list1 = true; 
+
+    while (current1 != nullptr || current2 != nullptr) {
+        if (use_list1 && current1 != nullptr) {
+            if (new_list->head == nullptr) {
+                new_list->head = new Node{current1->key, nullptr};
+                new_current = new_list->head;
+            } else {
+                new_current->next = new Node{current1->key, nullptr};
+                new_current = new_current->next;
+            }
+            current1 = current1->next; 
+        } else if (!use_list1 && current2 != nullptr) {
+            if (new_list->head == nullptr) {
+                new_list->head = new Node{current2->key, nullptr};
+                new_current = new_list->head;
+            } else {
+                new_current->next = new Node{current2->key, nullptr};
+                new_current = new_current->next;
+            }
+            current2 = current2->next;
+        }
+
+        use_list1 = !use_list1;
+
+        if (use_list1 && current1 == nullptr && current2 != nullptr) {
+            use_list1 = false;
+        } else if (!use_list1 && current2 == nullptr && current1 != nullptr) {
+            use_list1 = true;
+        }
+    }
+
+    return new_list;
+}
