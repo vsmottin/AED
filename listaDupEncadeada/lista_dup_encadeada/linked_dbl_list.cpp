@@ -43,14 +43,17 @@ bool List::pop_front() {
 }
 
 bool List::push_back(int key) {
-    Node* aux = new Node{key, this-> tail, nullptr};
-    if (!aux) return false;
+   if (this-> tail) {
+        Node* aux = new Node{key, this-> tail, nullptr};
 
-   if (tail) this-> tail -> next = aux;
-   else this-> head = aux;
+        if (!aux) return false;
 
-    this-> tail = aux;
-    return true;
+        this-> tail = aux;
+        this-> tail -> prev -> next = this-> tail;
+        return true;
+   }
+   
+   return this-> push_front(key);
 }
 
 bool List::equals(List* other) {
@@ -148,12 +151,12 @@ bool List::insert(int pos, int key) {
     }
 
     if(!aux) return false;
-    if (aux-> next == tail) return this-> push_back(key);
+    if (aux-> next == this-> tail) return this-> push_back(key);
 
     Node* novo = new Node{key, aux, aux-> next};
     if (!novo) return false;
     
-    aux-> next-> next-> prev = aux;
+    aux-> next-> prev = aux;
     aux-> next = novo;
     return true;
 }

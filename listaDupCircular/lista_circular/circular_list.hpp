@@ -9,8 +9,7 @@ public:
 
 class CircularList {
 private:
-    Node* head;
-    Node* tail;
+    Node* start;
 
 public:
     CircularList();
