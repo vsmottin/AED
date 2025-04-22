@@ -1,17 +1,26 @@
 #include <stdio.h>
-#include "linked_list.hpp"
+#include "linked_dbl_list.hpp"
 
 int main() {
-    LinkedList* list1 = new LinkedList();
+    List lista;
+    lista.push_front(3);
+    lista.push_front(2);
+    lista.push_front(1);
+    lista.push_back(4);
+    lista.print(); // -> 1 -> 2 -> 3 -> 4
 
-    list1->push_front(3);
-    list1->push_front(8);
-    list1->push_front(2);
-    list1->push_front(5);
+    lista.pop_front();
+    lista.pop_back();
+    lista.print(); // -> 2 -> 3
 
-    list1->print();
+    lista.insert_sorted(1);
+    lista.insert_sorted(5);
+    lista.insert_sorted(4);
+    lista.print(); // -> 1 -> 2 -> 3 -> 4 -> 5
 
-    list1->pop_front();
+    lista.remove(3);
+    lista.removeAt(0);
+    lista.print(); // -> 2 -> 4 -> 5
 
-    delete list1;
+    return 0;
 }

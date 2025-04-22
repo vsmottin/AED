@@ -11,7 +11,7 @@ LinkedList::LinkedList() { //metodo construtor
 LinkedList::~LinkedList() {
     Node* aux = this-> head;
     while (aux) {
-        Node* next = aux->next;
+        Node* next = aux-> next;
         delete aux;
         aux = next;
     }
