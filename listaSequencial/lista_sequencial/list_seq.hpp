@@ -42,4 +42,16 @@ public:
     void list_print_reverse();
 
     void list_add(int n, int* vet);
+
+    bool list_is_sorted();
+
+    void list_reverse();
+
+    bool list_equal(ListSeq* outra);
+
+    ListSeq* list_from_vector(size_t n, int* vet);
+
+    ListSeq* list_copy();
+    
+    int list_concat(ListSeq* list2);
 };
