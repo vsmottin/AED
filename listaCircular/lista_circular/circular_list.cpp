@@ -277,5 +277,108 @@ CircularList* CircularList::merge(CircularList* list2) {
 }
 
 CircularList* CircularList::deep_copy() {
+    if(!head) return new CircularList();
+
+    Node* newHead = new Node{head-> key, nullptr};
+    Node* atual = newHead;
+    Node* aux = head-> next;
+
+    while(aux != tail){
+      atual-> next = new Node{aux-> key, nullptr};
+
+      if(aux-> next) atual = atual-> next;
+      
+      aux = aux-> next;
+    }
+
+    CircularList* listaNova = new CircularList{};
+    listaNova-> head = newHead;
+    listaNova-> tail = atual;
+    listaNova-> tail-> next = newHead;
+
+    return listaNova;
+}
+
+CircularList* CircularList::concat(CircularList* lista2){
+  if(!head) return new CircularList();
+
+  Node* newHead = new Node{head-> key, nullptr};
+  Node* atual = newHead;
+  Node* aux = head-> next;
+
+  while(aux != tail){
+    atual-> next = new Node{aux-> key, nullptr};
+    atual = atual-> next;
     
+    aux = aux-> next;
+  }
+
+  CircularList* listaNova = new CircularList{};
+  listaNova-> head = newHead;
+
+  if(!lista2-> head){
+    listaNova-> tail = atual;
+    listaNova-> tail-> next = newHead;
+    return listaNova;
+  }
+
+  aux = lista2-> head;
+
+  while(aux != tail){
+    atual-> next = new Node{aux-> key, nullptr};
+
+    if(aux-> next != tail) atual = atual-> next;
+    
+    aux = aux-> next;
+  }
+
+    listaNova-> tail = atual;
+    listaNova-> tail-> next = newHead;
+    return listaNova;
+
+}
+
+CircularList* CircularList::merge(CircularList* lista2){
+  if(!head) return lista2;
+  if(!lista2-> head) return this;
+
+  Node* newSecond = new Node{lista2-> head-> key, nullptr};
+  Node* newHead = new Node{head-> key, newSecond};
+
+  Node* atual = newSecond;
+
+  Node* aux1 = head-> next;
+  Node* aux2 = head-> next;
+
+  bool turno_flag = 0;
+  bool fim = 0;
+
+  while(aux1 && aux2){
+    if(!turno_flag){
+        atual-> next = new Node{aux1-> key, nullptr};
+        if(aux1 != tail) atual = atual-> next;
+        aux1 = aux1-> next;
+        if(aux2 != lista2-> head) turno_flag = 1;
+        else fim = 0;
+    }
+
+    if(turno_flag){
+      atual-> next = new Node{aux2-> key, nullptr};
+      if(aux2 != lista2-> tail) atual = atual-> next;
+      aux1 = aux1-> next;
+      if (aux1 != head) turno_flag = 0;
+      else fim = 1;
+    }
+  }
+
+  CircularList* listaNova = new CircularList{};
+  listaNova-> head = newHead;
+  
+  fim ? listaNova-> tail = aux2 : listaNova-> tail = aux1;
+
+
+    listaNova-> tail = atual;
+    listaNova-> tail-> next = newHead;
+
+    return listaNova;
 }
