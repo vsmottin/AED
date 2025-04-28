@@ -117,3 +117,43 @@ bool ListSeq::print(){
 
     return true;
 }
+
+
+
+
+int ListSeq::list_get_available(){
+    int count = 0;
+    for (size_t i = 0; i < capacity; i++){
+        if (!data[i]){
+            count++;
+        }
+    }
+
+    return count;
+}
+
+void ListSeq::list_clear(){
+    delete [] data;
+    data = nullptr;
+    size = 0;
+}
+
+void ListSeq::list_remove_last(int n){
+    if(n > size) n = size;    
+    size -= n;
+}
+
+void ListSeq::list_print_reverse(){
+    for (size_t i = size - 1; i >= 0; i--){
+        cout << "Elemento " << i << ": " << data[i] << endl;
+    }
+}
+
+void ListSeq::list_add(int n, int* vet){
+    for (size_t i = 0; i < n; i++){
+        size++;
+        if (size > capacity) resize();
+        data[size + i] = vet[i];
+    }
+}
+

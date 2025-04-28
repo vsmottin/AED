@@ -32,4 +32,14 @@ public:
     void removeAt(int pos);
 
     bool addSorted(int elem);
+
+    int list_get_available();
+
+    void list_clear();
+
+    void list_remove_last(int n);
+
+    void list_print_reverse();
+
+    void list_add(int n, int* vet);
 };

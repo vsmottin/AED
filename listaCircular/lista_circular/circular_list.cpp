@@ -405,3 +405,7 @@ CircularList* CircularList::merge(CircularList* list2) {
 
     return new_list;
 }
+
+CircularList* CircularList::deep_copy() {
+    
+}
