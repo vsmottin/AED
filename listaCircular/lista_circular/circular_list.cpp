@@ -4,292 +4,162 @@
 
 using namespace std;
 
-CircularList::CircularList() { //metodo construtor
-    this-> start = nullptr;
+CircularList::CircularList() {
+  this->head = nullptr;
+  this->tail = nullptr;
 }
 
 CircularList::~CircularList() {
-    if (!this-> start) return;
-    Node* current = this-> start->next;
-    while (current != this-> start) {
-        Node* temp = current;
-        current = current->next;
-        delete temp;
-    }
-    delete this->start;
-    this->start = nullptr;
-}
-
+  Node* current = this->head;
+  while (current) {
+    Node* next = current->next;
+    delete current;
+    current = next;
+  }
+  this->head = nullptr;
+  this->tail = nullptr;
+}  
 
 bool CircularList::push_front(int key){
-    Node* node = new Node{key, start};
-    if (!node) return false;
-
-    if(!start){
-        node-> next = node;
-        this-> start = node;
-    } else{
-        Node* last = start;
-        while (last-> next != start) {
-            last = last-> next;
-        }
-
-        node-> next = start;
-        this-> start = node;
-        last-> next = start;
-    }
-    
-    return true;
+  Node* novo = new Node{key, this->head};
+  if (!this->head) {
+    this->head = novo;
+    this->tail = novo;
+  } else {
+    this->tail->next = novo;
+  }
+  this->tail = novo;
+  return true;
 }
 
 bool CircularList::pop_front() {
-    if (!this-> start) return false;
-
-    if (this-> start->next == this-> start) { 
-        delete this-> start;
-        this-> start = nullptr;
-    } else {
-        Node* last = this-> start;
-        while (last-> next != this-> start)
-            last = last-> next;
-
-        Node* temp = this-> start;
-        this-> start = this-> start-> next;
-        last-> next = this-> start;
-        delete temp;
-    }
-
-    return true;
+  if (!this->head) {
+    return false; // List is empty
+  }
+  Node* temp = this->head;
+  this->head = this->head->next;
+  delete temp;
+  if (!this->head) {
+    this->tail = nullptr; // lista fica vazia
+  } else {
+    this->tail->next = this->head; // mantendo a propriedade circular
+  }
+  return true;
 }
 
-
-bool CircularList::push_back(int key) { //insere no fim
-        Node* novo = new Node{key, start};
-        if (!novo) return false;
-    
-        if (!this-> start){
-            this-> start = novo;
-            novo-> next = novo;
-
-        } else {
-            Node* aux = this-> start;
-            while (aux-> next != this-> start) {
-                aux = aux-> next;
-            }
-
-            aux-> next = novo;
-            novo-> next = this-> start;
-            
-        }
-        return true;
+bool CircularList::push_back(int key) {
+  return true;
 }
 
 bool CircularList::equals(CircularList* other) {
-    Node* a1 = this-> start;
-    Node* a2 = other-> start;
-
-    if (!other || this->size() != other->size()) return false;
-    
-    while (a1-> next != this-> start){
-        if (a1-> key != a2-> key) return false;
-        
-        a1 = a1-> next;
-        a2 = a2-> next;
-    }
-
-    if (a1-> key != a2-> key) return false;
-    
-    return true;
+  if (this->size() != other->size())
+    return false;
+  Node* current1 = this->head;
+  Node* current2 = other->head;
+  while (current1 && current2) {
+    if (current1->key != current2->key)
+      return false;
+    current1 = current1->next;
+    current2 = current2->next;
+  }
+  return true;
 }
 
-int CircularList::get(int pos) { //retorna o node
-    if(this-> empty()) return -1;
-
-    Node* aux = this-> start;
-    for (size_t i = 0; i < pos; i++){
-        aux = aux-> next;
-        if(aux == this-> start) return -1;
-    }
-
-    return aux-> key;
+int CircularList::get(int pos) {
+  return 0;
 }
 
 void CircularList::print() {
-    if (!this-> start){
-        cout << "Lista vazia" << endl;
-        return;
-    }
-
-    Node* node = this-> start;
-    cout << " -> " << node-> key;
-    node = node-> next;
-
-    while(node-> next != this-> start){
-        cout << " -> " << node-> key;
-        node = node-> next;
-    }
-
-    cout << endl;
+  if (!this->head) {
+    cout << "Lista vazia" << endl;
+    return;
+  }
+  Node* aux = this->head;
+  do {
+    cout << aux->key << " ";
+    aux = aux->next;
+  } while (aux != this->head);
+  cout << endl;
 }
 
 int CircularList::size() {
-    if(!this-> start) return 0;
-
-    int size = 1;
-    Node* aux = this-> start-> next;
-
-    while (aux != this-> start){
-        size++;
-        aux = aux-> next;
-    }
-    
-    return size;
+  if (!this->head) {
+    return 0;
+  }
+  int count = 0;
+  Node* aux = this->head;
+  do {
+    count++;
+    aux = aux->next;
+  } while (aux != this->head);
+  return count;
 }
 
 Node* CircularList::find(int key) {
-    if (this-> empty()) return nullptr;
-    if(this-> start-> key == key) return this-> start;
-
-    Node* aux = this-> start-> next;
-    while (aux != this-> start){
-        if(aux-> key == key) return aux;
-        aux = aux-> next;
-    }
-
-    return nullptr;
+  return nullptr;
 }
 
-void CircularList::insert_after(int key, Node* elem) { //apos find
-    Node* novo =  new Node{key, elem-> next};
-    elem-> next = novo;
+void CircularList::insert_after(int key, Node* pos) {
+  if (!pos) {
+    return;
+  }
+  Node* novo = new Node{key, pos->next};
+  pos->next = novo;
+  if (pos == this->tail) {
+    this->tail = novo; // Atualiza o tail se o nó inserido for o último
+  }
 }
 
-bool CircularList::remove_after(Node* pos) { //apos find
-    if (this-> empty()) return false;
-
-    Node* aux = pos-> next;
-    if (!aux) return false;
-
-    pos-> next = pos-> next-> next;
-    delete aux;
-    
-    return true;
+bool CircularList::remove_after(Node* pos) {
+  return true;
 }
 
 bool CircularList::insert(int pos, int key) {
-    if(pos == 0) return this-> push_front(key);
-    
-    Node* aux = this-> start;
+//considerar que ele precisa inserir mesmo em uma posição inválida (push_back)
 
-    for (size_t i = 1; i < pos; i++){
-        aux = aux-> next;
-        if (aux == this-> start) return false;
-    }
-
-    if (aux-> next == start && pos == this->size()) {
-        Node* novo = new Node{key, start};
-        aux->next = novo;
-        return true;
-    }
-        
-    Node* novo = new Node{key, aux-> next};
-    if (!novo) return false;
-
-    aux->next = novo;
-    
-    return true;
+  if (pos < 0 || pos > this->size()) {
+    return false; // Posição inválida
+  }
+  if (pos == 0) {
+    return this->push_front(key);
+  }
+  Node* current = this->head;
+  for (int i = 0; i < pos - 1; i++) {
+    current = current->next;
+  }
+  Node* novo = new Node{key, current->next};
+  current->next = novo;
+  if (current == this->tail) {
+    this->tail = novo; // Atualiza o tail se o nó inserido for o último
+  }
+  return true;
 }
 
 bool CircularList::removeAt(int pos) {
-    if (this-> empty()) return false;
-    if (pos == 0) return pop_front();
-
-    Node* aux = this-> start;
-    
-    for (size_t i = 1; i < pos; i++){
-        aux = aux-> next;
-        if (aux == this-> start) return false;
-    }
-
-    if(aux-> next == start) return false;
-    
-    Node* deletar = aux-> next;
-    aux-> next = aux-> next-> next;
-    delete deletar;
-
-    return true;
+  return true;
 }
 
 bool CircularList::remove(int key) {
-    if (this->empty()) return false;
-
-    Node* current = start;
-    Node* prev = nullptr;
-
-    if (current->key == key) {
-        if (current->next == start) {
-            delete current;
-            start = nullptr;
-        } else {
-            Node* last = start;
-            while (last->next != start) last = last->next;
-            start = start->next;
-            last->next = start;
-            delete current;
-        }
-        return true;
-    }
-
-    prev = start;
-    current = start->next;
-    while (current != start) {
-        if (current->key == key) {
-            prev->next = current->next;
-            delete current;
-            return true;
-        }
-        prev = current;
-        current = current->next;
-    }
-
-    return false; 
+  return true;
 }
 
-
 bool CircularList::pop_back() {
-    if (this-> empty()) return false;
-
-    if (this-> start-> next == start) {
-        delete start;
-        start = nullptr;
-    } else {
-        Node* aux = start;
-
-        while (aux-> next-> next != start) {
-            aux = aux-> next;
-        }
-
-        Node* deletar = aux-> next;
-        aux-> next = start;
-        delete deletar;
-    }
-
-    return true;
+  return true;
 }
 
 bool CircularList::empty() {
-    return (!this-> start);
+  return true;
 }
 
 bool CircularList::insert_sorted(int key) {
-    if (!this-> start || key <= this-> start-> key) {
+    if (!this-> head || key <= this-> head-> key) {
         return push_front(key);
     }
 
-    Node* ant = this-> start;
-    Node* current = this-> start->next;
+    Node* ant = this-> head;
+    Node* current = this-> head->next;
     
-    while (current != this-> start && current->key < key) {
+    while (current != this-> head && current->key < key) {
         ant = current;
         current = current-> next;
     }
@@ -302,14 +172,14 @@ bool CircularList::insert_sorted(int key) {
 }
 
 void CircularList::print_last(){
-    if (!this-> start){
+    if (!this-> head){
         cout << "Lista vazia." << endl;
         return;
     }
 
-    Node* aux = this-> start;
+    Node* aux = this-> head;
 
-    while (aux-> next != start){
+    while (aux-> next != head){
         aux = aux-> next;
     }
 
@@ -318,42 +188,42 @@ void CircularList::print_last(){
 
 CircularList* CircularList::deep_copy() {
     CircularList* new_list = new CircularList();
-    if (!this->start) return  new_list;
+    if (!this->head) return  new_list;
 
-    Node* original_current = this->start;
-    Node* new_start = new Node{original_current->key, nullptr};
-    Node* new_current = new_start;
+    Node* original_current = this->head;
+    Node* new_head = new Node{original_current->key, nullptr};
+    Node* new_current = new_head;
 
     original_current = original_current->next;
 
-    while (original_current != start) {
+    while (original_current != head) {
         new_current->next = new Node{original_current->key, nullptr};
         new_current = new_current->next;
         original_current = original_current->next;
     }
 
-    new_current-> next = new_start;
-    new_list-> start = new_start;
+    new_current-> next = new_head;
+    new_list-> head = new_head;
     return new_list;
 }
 
 CircularList* CircularList::concat(CircularList* list2) {
     CircularList* new_list = new CircularList();
 
-    if (!start && (!list2 || list2->empty())) return new_list;
+    if (!head && (!list2 || list2->empty())) return new_list;
 
-    Node* current = this->start;
+    Node* current = this->head;
     do {
         new_list->push_back(current->key);
         current = current->next;
-    } while (current != this->start);
+    } while (current != this->head);
 
     if (list2 && !list2->empty()) {
-        current = list2->start;
+        current = list2->head;
         do {
             new_list->push_back(current->key);
             current = current->next;
-        } while (current != list2->start);
+        } while (current != list2->head);
     }
 
     return new_list;
@@ -364,25 +234,25 @@ CircularList* CircularList::merge(CircularList* list2) {
     CircularList* new_list = new CircularList(); 
     Node* new_current = nullptr; 
 
-    Node* current1 = this->start; 
-    Node* current2 = (list2 != nullptr) ? list2->start : nullptr; 
+    Node* current1 = this->head; 
+    Node* current2 = (list2 != nullptr) ? list2->head : nullptr; 
 
     bool use_list1 = true; 
 
     while (current1 || current2) {
         if (use_list1 && current1) {
-            if (!new_list-> start) {
-                new_list-> start = new Node{current1->key, nullptr};
-                new_current = new_list-> start;
+            if (!new_list-> head) {
+                new_list-> head = new Node{current1->key, nullptr};
+                new_current = new_list-> head;
             } else {
                 new_current->next = new Node{current1->key, nullptr};
                 new_current = new_current-> next;
             }
             current1 = current1->next; 
         } else if (!use_list1 && current2) {
-            if (new_list->start == nullptr) {
-                new_list->start = new Node{current2->key, nullptr};
-                new_current = new_list-> start;
+            if (new_list->head == nullptr) {
+                new_list->head = new Node{current2->key, nullptr};
+                new_current = new_list-> head;
             } else {
                 new_current->next = new Node{current2->key, nullptr};
                 new_current = new_current-> next;
@@ -400,7 +270,7 @@ CircularList* CircularList::merge(CircularList* list2) {
     }
 
     if (new_current) {
-        new_current->next = new_list-> start;
+        new_current->next = new_list-> head;
     }
 
     return new_list;
