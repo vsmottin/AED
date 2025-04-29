@@ -258,23 +258,6 @@ bool List::pop_back() {
     return true;
 }
 
-bool List::pop_back(){
-    if(!tail) return false;
-
-    if(tail == head){
-        delete tail;
-        delete head;
-        head = nullptr;
-        tail = nullptr;
-    }
-
-    tail = tail-> prev;
-    delete tail-> next;
-    tail-> next = nullptr;
-
-    return true;
-}
-
 bool List::empty() {
     return (!this->head);
 }

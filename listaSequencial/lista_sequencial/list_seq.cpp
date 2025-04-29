@@ -8,8 +8,7 @@ ListSeq::ListSeq(int _capacity){
 };
 
 bool ListSeq::add(int elem){
-    if (size < capacity)
-    {
+    if (size < capacity){
         data[size++] = elem;
         return true;
     }
@@ -17,13 +16,11 @@ bool ListSeq::add(int elem){
     return false;
 };
 
-bool ListSeq::isEmpty()
-{
+bool ListSeq::isEmpty(){
     return size == 0;
 }
 
-bool ListSeq::isFull()
-{
+bool ListSeq::isFull(){
     return size == capacity;
 }
 
@@ -45,7 +42,6 @@ void ListSeq::destroy() {
     data = nullptr;
     size = 0;
     capacity = 0;
-    
 }
 
 int ListSeq::find(int elem) {

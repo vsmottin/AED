@@ -281,6 +281,7 @@ bool CircularList::empty() {
     return (!this-> start);
 }
 
+// e se for o tail?
 bool CircularList::insert_sorted(int key) {
     if (!this-> start || key <= this-> start-> key) {
         return push_front(key);
