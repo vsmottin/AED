@@ -62,6 +62,8 @@
     "string_view": "cpp",
     "initializer_list": "cpp",
     "new": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "vector": "cpp",
+    "string": "cpp"
   }
 }

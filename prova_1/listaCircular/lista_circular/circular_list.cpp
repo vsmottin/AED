@@ -148,5 +148,5 @@ bool CircularList::pop_back() {
 }
 
 bool CircularList::empty() {
-  return true;
+  return (!this->head);
 }
