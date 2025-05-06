@@ -161,6 +161,29 @@ bool List::insert(int pos, int key) {
     return true;
 }
 
+
+bool List::insert(int pos, int key){
+    
+    if (empty() || pos == 0) return push_front(key);
+    
+    Node* novo = new Node{key, nullptr};
+    Node* aux = head;
+
+    for (size_t i = 1; i < pos && aux; i++){
+        aux = aux-> next;
+    }
+    
+    if (!aux) return push_back(key);
+
+    novo-> prev = aux-> prev;
+    aux-> prev -> next = novo;
+
+    novo-> next = aux;
+    aux-> prev = novo;
+    
+    return true;
+}
+
 bool List::removeAt(int pos) {
     if(pos == 0) return this-> pop_front();
 
@@ -197,6 +220,31 @@ bool List::remove(int key) {
     return true;
 }
 
+
+bool List::remove(int key){
+    
+    if(head-> key == key) return pop_front();
+    
+    Node* aux = head;
+
+    while(aux-> next){
+        aux = aux-> next;
+
+        if(aux-> key == key){
+            aux-> prev-> next = aux-> next;
+            if(aux == tail) return pop_back();
+            aux-> next-> prev = aux-> prev;
+
+            delete aux;
+            break;
+        }
+    }
+
+    if (!aux-> next) return false;
+
+    return true;
+}
+
 bool List::pop_back() {
     if (!this-> tail) return false;
 
@@ -228,5 +276,29 @@ bool List::insert_sorted(int key){
 
     aux-> next-> prev = novo;
     aux-> next = novo;
+    return true;
+}
+
+
+bool List::insert_sorted(int key){
+    if(head-> key >= key || empty()) return push_front(key);
+    if(tail-> key <= key) return push_back(key);
+
+    Node* novo = new Node{key, nullptr};
+    Node* aux = head-> next;
+
+    while(aux){
+        if(aux-> key >= key){
+            novo-> prev = aux-> prev;
+            novo-> next = aux;
+
+            aux-> prev-> next = novo;
+            aux-> prev = novo;
+            break;
+        }
+        
+        aux = aux-> next;
+    }
+
     return true;
 }

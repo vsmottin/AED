@@ -336,3 +336,59 @@ LinkedList* LinkedList::merge(LinkedList* list2) {
 
     return new_list;
 }
+
+
+LinkedList* LinkedList::deep_copy(){
+    if (empty()) return nullptr;
+
+    LinkedList* listaNova = new LinkedList{};
+
+    Node* aux = this-> head;
+    Node* newHead = new Node{head-> key, nullptr};
+    Node* atual = newHead-> next;
+    
+    while(aux-> next){
+        aux = aux-> next;
+        atual = new Node{aux-> key, nullptr};
+        atual = atual-> next;
+    }
+
+    listaNova-> head = newHead;
+    return listaNova;
+}
+
+LinkedList* LinkedList::concat(LinkedList* list2){
+    if (empty()) return nullptr;
+
+    LinkedList* listaNova = new LinkedList{};
+
+    Node* newHead = new Node{head-> key, nullptr};
+    Node* atual = newHead;
+
+    Node* aux = head -> next;
+    
+    while(aux){
+        atual-> next = new Node{aux-> key, nullptr};
+        atual = atual-> next;
+        aux = aux-> next;
+    }
+
+    listaNova-> head = newHead;
+    
+    if (!list2-> head) return listaNova;
+    
+    atual = new Node{list2-> head-> key, nullptr};
+    aux = list2-> head-> next;
+
+    while(aux){
+        atual-> next = new Node{aux-> key, nullptr};
+        atual = atual-> next;
+        aux = aux-> next;
+    }
+
+    return listaNova;
+}
+
+LinkedList* LinkedList::merge(LinkedList* list2){
+    
+}

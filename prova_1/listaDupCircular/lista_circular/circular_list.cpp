@@ -42,6 +42,27 @@ bool CircularList::push_front(int key){
     return true;
 }
 
+bool CircularList::push_front(int key) {
+    Node* newNode = new Node{key, nullptr, nullptr};
+    if (!newNode) return false;  
+
+    if (!start) {
+        newNode->next = newNode;
+        newNode->prev = newNode;
+        start = newNode;
+        return true;
+    }
+
+    newNode->next = start;
+    newNode->prev = start->prev;
+    
+    start->prev->next = newNode;
+    start->prev = newNode;
+    
+    start = newNode;
+    return true;
+}
+
 bool CircularList::pop_front() {
     if (!this-> start) return false;
 
@@ -281,6 +302,7 @@ bool CircularList::empty() {
     return (!this-> start);
 }
 
+// e se for o tail?
 bool CircularList::insert_sorted(int key) {
     if (!this-> start || key <= this-> start-> key) {
         return push_front(key);
